@@ -7,7 +7,7 @@ We will see an example of how to stop code that erroneously contains stray AWS c
 * **Level**: Intermediate
 * **Duration**: 2 hours
 * **<a href="https://aws.amazon.com/blogs/security/new-whitepaper-now-available-the-security-perspective-of-the-aws-cloud-adoption-framework/" target="_blank">AWS CAF</a>**: Security Perspective
-* **<a href="https://awssecworkshops.com/getting-started/" target="_blank">Prerequisites</a href>**: AWS Account, Admin IAM User
+* **<a href="https://awssecworkshops.com/getting-started/" target="_blank">Prerequisites</a>**: AWS Account, Admin IAM User
 
 ## Scenario
 
