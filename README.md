@@ -1,13 +1,11 @@
-## My Project
+## Adding Security to Pipelines in AWS
 
-TODO: Fill this README out!
+This hands workshop will walk you through various common scenarios looking from both a developer's perspective and a security engineer's perspective.  In order to quickly deliver applications to production, development and security teams work together to automate secure pipelines.
 
-Be sure to:
+## Start the workshop:
 
-* Change the title in this README
-* Edit your repository description on GitHub
+Visit the site to get started: [https://devops.awssecworkshops.com/](https://devops.awssecworkshops.com/)
 
 ## License
 
 This library is licensed under the MIT-0 License. See the LICENSE file.
-

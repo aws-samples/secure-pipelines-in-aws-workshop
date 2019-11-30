@@ -1,0 +1,433 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: |
+  AWS DevSecOps Template.
+Parameters:
+  PipelineName:
+    Default: DevSecOps
+    Description: A name for the pipeline
+    Type: String
+  S3Bucket:
+    Default: 'InputBucketNameYouCreated'
+    Description: >-
+      The name of the S3 bucket that contains the source Lambda security guardrails, which must be
+      in the same region as this stack
+    Type: String
+  SourceS3Key:
+    Default: codepipe-AWS-devsecops.zip
+    Description: 'The zip file for the application code source to be built by the pipeline.'
+    Type: String
+  LambdaS3Key:
+    Default: SecGuardRails.zip
+    Description: >-
+      This is the source files for Lambda code used to do Security Guard rails in the various stages.
+    Type: String
+  TemplateFileName:
+    Default: resources.json
+    Description: The file name of the  template that will build out the applicatino.
+    Type: String
+  TemplateFilePath:
+    Default: codepipe-AWS-devsecops/resources.json
+    Description: The file path of the  template that will build out the application.
+    Type: String
+  TestStackName:
+    Default: AWS-devsecops-TestStack
+    Description: A name for the test stack
+    Type: String
+  TestStackConfig:
+    Default: codepipe-AWS-devsecops/test-stack-configuration.json
+    Description: The configuration file name for the test stack. This will build the application in a test VPC.
+    Type: String
+  ProdStackName:
+    Default: AWS-devsecops-ProdStack
+    Description: A name for the production stack
+    Type: String
+  ProdStackConfig:
+    Default: codepipe-AWS-devsecops/prod-stack-configuration.json
+    Description: The configuration file name for the production stack.  This will build the application in a prod VPC.
+    Type: String
+  ChangeSetName:
+    Default: UpdatePreview-MyResource-ProdChange
+    Description: A name for the production stack change set
+    Type: String
+  Email:
+    Default: noreply@noemailaddress.com
+    Description: The email address where CodePipeline sends pipeline notifications (Optional for labs)
+    Type: String
+  DynamoDBTableName:
+    Default: AWS-devsecops
+    Description: A name for the DynamoDBTable used to store rules
+    Type: String
+Metadata:
+  'AWS::CloudFormation::Interface':
+    ParameterGroups:
+      - Label:
+          default: CodePipeline Settings
+        Parameters:
+          - PipelineName
+          - S3Bucket
+          - SourceS3Key
+          - Email
+      - Label:
+          default: Test Stack Settings
+        Parameters:
+          - TestStackName
+          - TemplateFileName
+          - TestStackConfig
+          - TemplateFilePath
+      - Label:
+          default: Production Stack Settings
+        Parameters:
+          - ChangeSetName
+          - ProdStackName
+          - ProdStackConfig
+Resources:
+  devsecopsVPCProd:
+    Type: 'AWS::EC2::VPC'
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsSupport: 'false'
+      EnableDnsHostnames: 'false'
+      Tags:
+        - Key: AWS
+          Value: devsecopsProdVPC
+  devsecopsVPCTest:
+    Type: 'AWS::EC2::VPC'
+    Properties:
+      CidrBlock: 10.1.0.0/16
+      EnableDnsSupport: 'false'
+      EnableDnsHostnames: 'false'
+      Tags:
+        - Key: AWS
+          Value: devsecopsTestVPC
+  ArtifactStoreBucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      VersioningConfiguration:
+        Status: Enabled
+  CodePipelineSNSTopic:
+    Type: 'AWS::SNS::Topic'
+    Properties:
+      Subscription:
+        - Endpoint: !Ref Email
+          Protocol: email
+      TopicName: !Ref PipelineName
+  CodePipelineLambdaRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName:  module-secops1-PipelineRole-56457
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+  LambdaCodePipelineExecutionPolicy:
+    DependsOn:
+      - CodePipelineLambdaRole
+    Type: 'AWS::IAM::Policy'
+    Properties:
+      PolicyName: LambdaRolePolicy
+      Roles:
+        - !Ref CodePipelineLambdaRole
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - 'logs:*'
+            Resource:
+              - 'arn:aws:logs:*:*:*'
+          - Effect: Allow
+            Action:
+              - 'codepipeline:PutJobSuccessResult'
+              - 'codepipeline:PutJobFailureResult'
+              - 's3:*'
+              - 'ec2:*'
+              - 'cloudformation:*'
+              - 'dynamodb:*'
+              - 'sns:*'
+            Resource:
+              - '*'
+  CFNValidateLambda:
+    Type: 'AWS::Lambda::Function'
+    DependsOn:
+      - CodePipelineLambdaRole
+      - LambdaCodePipelineExecutionPolicy
+    Properties:
+      Code:
+        S3Bucket: !Ref S3Bucket
+        S3Key: !Ref LambdaS3Key
+      Role: !GetAtt 
+        - CodePipelineLambdaRole
+        - Arn
+      Description: Always return success
+      Timeout: 60
+      Handler: cfn_validate_lambda.lambda_handler
+      Runtime: python2.7
+  TestStackValidationLambda:
+    Type: 'AWS::Lambda::Function'
+    DependsOn:
+      - CodePipelineLambdaRole
+      - LambdaCodePipelineExecutionPolicy
+    Properties:
+      Code:
+        S3Bucket: !Ref S3Bucket
+        S3Key: !Ref LambdaS3Key
+      Role: !GetAtt 
+        - CodePipelineLambdaRole
+        - Arn
+      Description: Always return success
+      Timeout: 60
+      Handler: stack_validate_lambda.lambda_handler
+      Runtime: python2.7
+  myDynamoDBTable:
+    Type: 'AWS::DynamoDB::Table'
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: rule
+          AttributeType: S
+      KeySchema:
+        - AttributeName: rule
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: '5'
+        WriteCapacityUnits: '5'
+      TableName: !Ref DynamoDBTableName
+  CFNRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName:  module-nathacas-secops1-PipelineRole-09876
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action:
+              - 'sts:AssumeRole'
+            Effect: Allow
+            Principal:
+              Service:
+                - cloudformation.amazonaws.com
+        Version: 2012-10-17
+      Path: /
+      Policies:
+        - PolicyName: CloudFormationRole
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Action:
+                  - 'ec2:*'
+                  - 's3:*'
+                  - 'ssm:GetParameters'
+                Effect: Allow
+                Resource: '*'
+  PipelineRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName:  module-nathacas-secops1-PipelineRole-123123
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action:
+              - 'sts:AssumeRole'
+            Effect: Allow
+            Principal:
+              Service:
+                - codepipeline.amazonaws.com
+        Version: 2012-10-17
+      Path: /
+      Policies:
+        - PolicyName: CodePipelineAccess
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Action:
+                  - 's3:*'
+                  - 'ec2:*'
+                  - 'cloudformation:CreateStack'
+                  - 'cloudformation:DescribeStacks'
+                  - 'cloudformation:DeleteStack'
+                  - 'cloudformation:UpdateStack'
+                  - 'cloudformation:CreateChangeSet'
+                  - 'cloudformation:ExecuteChangeSet'
+                  - 'cloudformation:DeleteChangeSet'
+                  - 'cloudformation:DescribeChangeSet'
+                  - 'cloudformation:SetStackPolicy'
+                  - 'iam:PassRole'
+                  - 'sns:Publish'
+                  - 'lambda:*'
+                Effect: Allow
+                Resource: '*'
+  Pipeline:
+    Type: 'AWS::CodePipeline::Pipeline'
+    Properties:
+      ArtifactStore:
+        Location: !Ref ArtifactStoreBucket
+        Type: S3
+      DisableInboundStageTransitions: []
+      Name: !Ref PipelineName
+      RoleArn: !GetAtt 
+        - PipelineRole
+        - Arn
+      Stages:
+        - Name: Commit
+          Actions:
+            - InputArtifacts: []
+              Name: TemplateSource
+              ActionTypeId:
+                Category: Source
+                Owner: AWS
+                Provider: S3
+                Version: '1'
+              Configuration:
+                S3Bucket: !Ref ArtifactStoreBucket
+                S3ObjectKey: !Ref SourceS3Key
+              OutputArtifacts:
+                - Name: TemplateSource
+              RunOrder: '1'
+        - Name: StaticCodeAnalysis
+          Actions:
+            - InputArtifacts:
+                - Name: TemplateSource
+              Name: CFNParsing
+              ActionTypeId:
+                Category: Invoke
+                Owner: AWS
+                Provider: Lambda
+                Version: '1'
+              Configuration:
+                FunctionName: !Ref CFNValidateLambda
+                UserParameters: !Sub 
+                  - >-
+                    {"input": "TemplateSource", "file":
+                    "${TemplateFilePath}","output": "${S3BucketName}"}
+                  - S3BucketName: !Ref ArtifactStoreBucket
+              OutputArtifacts:
+                - Name: TemplateSource2
+              RunOrder: '1'
+        - Name: TestDeployment
+          Actions:
+            - InputArtifacts:
+                - Name: TemplateSource
+              Name: CreateStack
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Provider: CloudFormation
+                Version: '1'
+              OutputArtifacts:
+                - Name: StackOutput
+              Configuration:
+                ActionMode: REPLACE_ON_FAILURE
+                RoleArn: !GetAtt 
+                  - CFNRole
+                  - Arn
+                StackName: !Ref TestStackName
+                TemplateConfiguration: !Sub 'TemplateSource::${TestStackConfig}'
+                TemplatePath: !Sub 'TemplateSource::${TemplateFilePath}'
+              RunOrder: '1'
+            - InputArtifacts:
+                - Name: TemplateSource
+                - Name: StackOutput
+              Name: StackValidation_Test
+              ActionTypeId:
+                Category: Invoke
+                Owner: AWS
+                Version: '1'
+                Provider: Lambda
+              OutputArtifacts: []
+              Configuration:
+                FunctionName: !Ref TestStackValidationLambda
+                UserParameters: !Ref TestStackName
+              RunOrder: '2'
+            - Name: ApproveTestStack
+              ActionTypeId:
+                Category: Approval
+                Owner: AWS
+                Provider: Manual
+                Version: '1'
+              Configuration:
+                NotificationArn: !Ref CodePipelineSNSTopic
+                CustomData: !Sub >-
+                  Do you want to create a change set against the production
+                  stack and delete the ${TestStackName} stack?
+              RunOrder: '3'
+            - Name: DeleteTestStack
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Provider: CloudFormation
+                Version: '1'
+              Configuration:
+                ActionMode: DELETE_ONLY
+                RoleArn: !GetAtt 
+                  - CFNRole
+                  - Arn
+                StackName: !Ref TestStackName
+              RunOrder: '4'
+        - Name: ProductionDeployment
+          Actions:
+            - InputArtifacts:
+                - Name: TemplateSource
+              Name: CreateChangeSet
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Provider: CloudFormation
+                Version: '1'
+              OutputArtifacts: []
+              Configuration:
+                ActionMode: CHANGE_SET_REPLACE
+                RoleArn: !GetAtt 
+                  - CFNRole
+                  - Arn
+                StackName: !Ref ProdStackName
+                ChangeSetName: !Ref ChangeSetName
+                TemplateConfiguration: !Sub 'TemplateSource::${ProdStackConfig}'
+                TemplatePath: !Sub 'TemplateSource::${TemplateFilePath}'
+              RunOrder: '1'
+            - Name: ExecuteChangeSet
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Provider: CloudFormation
+                Version: '1'
+              Configuration:
+                ActionMode: CHANGE_SET_EXECUTE
+                RoleArn: !GetAtt 
+                  - CFNRole
+                  - Arn
+                ChangeSetName: !Ref ChangeSetName
+                StackName: !Ref ProdStackName
+              RunOrder: '2'
+
+  ProdVPCID:
+    Type: "AWS::SSM::Parameter"
+    Properties:
+      Name: ProdVPCIdParam
+      Type: "String"
+      Value: !Ref devsecopsVPCProd
+      Description: "Storing ProdVPC ID."
+      Tags:
+        "Environment": "PROD"
+
+  TestVPCID:
+    Type: "AWS::SSM::Parameter"
+    Properties:
+      Name: TestVPCIdParam
+      Type: "String"
+      Value: !Ref devsecopsVPCTest
+      Description: "Storing TestVPC ID."
+      Tags:
+        "Environment": "TEST"
+
+Outputs:
+  LambdaFunction:
+    Description: Lambda Function Name
+    Value: !Ref CFNValidateLambda
+  ProdVPCId:
+    Description: DevSecOps Production VPC ID
+    Value: !Ref devsecopsVPCProd
+  TestVPCId:
+    Description: DevSecOps Test VPC ID
+    Value: !Ref devsecopsVPCTest

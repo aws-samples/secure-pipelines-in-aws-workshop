@@ -1,0 +1,56 @@
+# Project information
+
+site_name: Adding Security into DevOps
+site_short_name: Security Inside Pipelines
+site_description: 'This hands-on workshop is where you will learn about a number of AWS services involved integrating security into CICD pipelines.  At the end of this workshop, you will learn about the automated possibilities where code development and deployment can be managed at scale through the use of various AWS services including AWS CodePipeline, AWS CodeBuild, and AWS Lambda.'
+site_author: 'aws-security-workshops@amazon.com'
+site_url: 'https://devops.awssecworkshops.com/'
+
+# Repository
+repo_name: 'aws-samples/secure-pipelines-in-aws-workshop'
+repo_url: 'https://github.com/aws-samples/secure-pipelines-in-aws-workshop'
+
+# Copyright
+copyright: '&copy; 2019, Amazon Web Services, Inc. or its affiliates. All rights reserved.'
+
+# Configuration
+theme:
+  name: 'material'
+  logo: 'assets/images/aws_smile_logo.png'
+  favicon: 'assets/images/aws-favicon.ico'
+  feature:
+    tabs: true
+  custom_dir: 'docs/theme'
+
+# Customization
+extra_css:
+  - 'stylesheets/custom.css'
+extra:
+  social:
+    - type: 'home'
+      link: 'https://awssecworkshops.com'
+    - type: 'shield'
+      link: 'https://aws.amazon.com/security/'
+    - type: 'twitter'
+      link: 'https://twitter.com/awssecurityinfo?lang=en'
+    - type: 'rss'
+      link: 'https://aws.amazon.com/blogs/security/'
+
+# Extensions
+markdown_extensions:
+  - admonition
+  - codehilite
+  - pymdownx.details
+
+# Navigation
+nav:
+  - Overview: 'index.md'
+  - 'Module 1:  Environment Build': '01-environment-setup.md'
+  - 'Module 2:  Encrypt the EBS': '02-first-pipeline-error.md'
+  - 'Module 3:  No AWS Keys': '03-No-AWS-Secrets.md'
+  - 'Module 4:  Find AWS Keys': '04-find-aws-keys.md'
+  - 'Module 5:  Missing S3 Configuration':  '05-missing-s3-confg.md'
+  - 'Module 6:  Configuring S3 Security':  '06-s3-versioning.md'
+  - 'Module 7:  Cleaning Up':  '07-cleanup.md'
+  - Contributing: 'contribute.md'
+  - License: 'license.md'

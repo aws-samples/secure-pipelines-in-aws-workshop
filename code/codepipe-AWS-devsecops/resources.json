@@ -1,0 +1,74 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "AWS CloudFormation Sample Template for Continuous Delievery:AWS DevSecOps",
+  "Parameters": {
+    "VPCName": {
+      "Description": "vpc-03994a431fd6d8905",
+      "Type": "AWS::SSM::Parameter::Value<String>"
+    },
+    "AWSKey":{
+      "Description": "AWSKey",
+      "Type" : "String",
+      "Default" : "AKIA000000000000000Q"
+    },
+    "AWSSecretKey":{
+      "Description": "AWSSecretKey",
+      "Type" : "String",
+      "Default" : "xB00A0BBB78IfPiwxOrOaaa6A1vSXa4aaaVpIieC"
+    }
+
+  },
+  "Resources": {
+    "SecurityGroup": {
+      "Type" : "AWS::EC2::SecurityGroup",
+      "Properties" : {
+        "GroupDescription" : "SSH Security Group",
+        "SecurityGroupIngress" : {
+          "CidrIp": "1.2.3.4/32",
+          "FromPort": 21,
+          "ToPort": 21,
+          "IpProtocol": "tcp"
+        },
+  		"Tags": [
+  			{"Key": "Name", "Value": "AWS"},
+  			{"Key": "LOB", "Value": "AWSSecurityJam"}
+  		],
+        "VpcId" : { "Ref" : "VPCName" }
+      }
+    },
+    "EC2Volume" : {
+      "Type" : "AWS::EC2::Volume",
+      "Properties" : {
+        "Size" : "8",
+        "Encrypted" : "false",
+        "AvailabilityZone" : {
+            "Fn::Select" : [ "0", { "Fn::GetAZs" : "" } ]
+              },
+        "Tags" : [
+          {"Key": "Name", "Value": "AWS"},
+          {"Key": "LOB", "Value": "SecurityJam"}
+        ]
+      }
+    },
+    "S3Bucket": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "AccessControl" : "BucketOwnerFullControl",
+        "Tags" : [
+          {"Key": "Name", "Value": "AWS"},
+          {"Key": "LOB", "Value": "DevSecOps"}
+        ]
+      }
+    }
+  },
+  "Outputs" : {
+    "SecurityVolume" : {
+      "Description" : "EBS Volume created by this Cloudformation template",
+      "Value" : { "Ref" : "EC2Volume" }
+    },
+    "SecurityBucket" : {
+      "Description" : "S3 Bucket created by Finance team",
+      "Value" : { "Ref" : "S3Bucket" }
+    }
+  }
+}
