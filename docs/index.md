@@ -1,7 +1,7 @@
 # Overview
 
 Welcome to the world of DevSecOps! You have heard of DevOps. Nowadays, DevSecOps is becoming more popular. How can Security organizations enable developers build security into their products and services? In this workshop, you will experience how tooling and automation can create a security conscious culture throughout the development lifecycle while scaling to the demands of the business.
-In this workshop, we will see an example of how to stop code that erroneously contains stray AWS credentials (we revoked them first, of course) from being deployed.
+We will see an example of how to stop code that erroneously contains stray AWS credentials (we revoked them first, of course) from being deployed.
 
 
 * **Level**: Intermediate
