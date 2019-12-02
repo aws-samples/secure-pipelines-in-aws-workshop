@@ -6,12 +6,12 @@ Now that your pipeline is built.  As a developer, you uploaded the zip files to 
 
 It looks like the pipeline has failed at the "Static Code Analysis" stage.
 
-![FirstPipelineError](./images/01-firstpipelineerror.png)
+![FirstPipelineError](./images/02-firstpipelineerror.png)
 
 1.  Click on the "Details" link and take a look at the error.  Based on the error message, what needs to be changed?
 2.  Click on the "i" next to CFNParsing.
 
-![CFNParsing](./images/01-CFNParsingInfo.png)
+![CFNParsing](./images/02-CFNParsingInfo.png)
 
 3.  Note the location and file this is referencing.
 4.  Locate the file, resources.json and open it with your favorite editor.
@@ -21,7 +21,7 @@ It looks like the pipeline has failed at the "Static Code Analysis" stage.
 8.  Go back to your CodePipeline screen and watch the stages go through processing again.  If you fixed the code correctly, it should go through to the next stage.
 9. When it gets to the ApproveTestStack stage, click on the Review button and then approve the deployment. (Normally you would get an email asking for manual approval, but for the purposes of this lab, do not wait). Everything should then carry on until you have a pipeline full of stages which have succeeded.
 
-![ApprovalStage](./images/01-ApprovalStage.png)
+![ApprovalStage](./images/02-ApprovalStage.png)
 
-(Optional) Feel free to click on some Details icons to look into what happened at each stage in more detail.  CFNParsing is a lambda function is a script which does various checks for security compliance.
+(Optional) Feel free to click on some **Details** icons to look into what happened at each stage in more detail.  CFNParsing is a lambda function is a script which does various checks for security compliance.
 
