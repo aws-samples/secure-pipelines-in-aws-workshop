@@ -14,7 +14,7 @@ In order to prevent charges to your account we recommend cleaning up the infrast
 	* Go to <a href="https://s3.console.aws.amazon.com/s3/home?region=us-west-2#" target="_blank">Amazon S3</a> console.
     * Go into the s3 bucket you created in module 1 and delete all of the contents.
     * After the bucket is empty, delete the bucket.
-    * Look for *artifactstorebucket* and delete all of the contents.
+    * Look for *artifactstorebucket* and delete all of the contents.  You will have to click the "Show" button to show all versions of files.  The versions of files also have to be deleted before the bucket can be deleted.
     * After the bucket is empty, delete the bucket.
 
 2.  Delete the Cloudformation stack.
