@@ -541,12 +541,12 @@
 <p>Now that your pipeline is built.  As a developer, you uploaded the zip files to s3, you committed code into the pipeline.  In this module, this example shows what a developer would experience when code does not comply with security requirements.  In this particular case, there is a security requirement that EBS volumes must be encrypted.</p>
 <h2 id="first-pipeline-error">First Pipeline Error</h2>
 <p>It looks like the pipeline has failed at the "Static Code Analysis" stage.</p>
-<p><img alt="FirstPipelineError" src="../images/01-firstpipelineerror.png" /></p>
+<p><img alt="FirstPipelineError" src="../images/02-firstpipelineerror.png" /></p>
 <ol>
 <li>Click on the "Details" link and take a look at the error.  Based on the error message, what needs to be changed?</li>
 <li>Click on the "i" next to CFNParsing.</li>
 </ol>
-<p><img alt="CFNParsing" src="./images/01-CFNParsingInfo.png" /></p>
+<p><img alt="CFNParsing" src="../images/02-CFNParsingInfo.png" /></p>
 <ol>
 <li>Note the location and file this is referencing.</li>
 <li>Locate the file, resources.json and open it with your favorite editor.</li>
@@ -556,7 +556,7 @@
 <li>Go back to your CodePipeline screen and watch the stages go through processing again.  If you fixed the code correctly, it should go through to the next stage.</li>
 <li>When it gets to the ApproveTestStack stage, click on the Review button and then approve the deployment. (Normally you would get an email asking for manual approval, but for the purposes of this lab, do not wait). Everything should then carry on until you have a pipeline full of stages which have succeeded.</li>
 </ol>
-<p><img alt="ApprovalStage" src="./images/01-ApprovalStage.png" /></p>
+<p><img alt="ApprovalStage" src="../images/02-ApprovalStage.png" /></p>
 <p>(Optional) Feel free to click on some Details icons to look into what happened at each stage in more detail.  CFNParsing is a lambda function is a script which does various checks for security compliance.</p>
                 
                   
