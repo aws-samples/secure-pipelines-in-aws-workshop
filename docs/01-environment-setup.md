@@ -2,14 +2,6 @@
 
 If you are doing this workshop at an event, you will be provided with either an AWS account or a hash key for event engine. Please raise your hand and flag down a workshop facilitator for assistance on any issues during the lab.
 
-**Agenda**
- 
-1. Run the intial CloudFormation Template – 5 min
-2. Confirm SNS subscription in your email - 1 min
-3. Create a CloudWatch Rule - 5 min
-4. Manually Enable detective controls - 5 min
-
-
 
 ## Are you using your own AWS account or given one at a sponsored event?
 

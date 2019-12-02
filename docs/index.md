@@ -13,8 +13,6 @@ We will see an example of how to stop code that erroneously contains stray AWS c
 
 For this workshop, you will build a pipeline using AWS CodePipeline and AWS Lambda.  S3 will be your code repository.  Your developers want to deploy an AWS Cloudformation template.  However, you need to ensure it is secure before it is released to production.
 
-## Presentation deck
-[Workshop Presentation Deck](./secure-pipelines-in-aws-presentation.pdf)
 
 ## Region
 Please use the **us-west-2 (Oregon)** region for this workshop.

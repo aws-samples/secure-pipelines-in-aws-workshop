@@ -31,3 +31,8 @@ In order to prevent charges to your account we recommend cleaning up the infrast
 Congratulations on completing this workshop! This is the workshop's permanent home, so feel free to revisit as often as you'd like.
 
 
+
+##  Continuing On
+
+The workshop is intended to give you an idea of how to start your own Security
+
