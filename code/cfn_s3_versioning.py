@@ -246,15 +246,19 @@ def evaluate_template(template, job_id):
                 if template['Resources'][r]['Type'] == 'AWS::S3::Bucket':
                     #print(template['Resources'][r]['Properties'])
                     try:
-                        if template['Resources'][r]['Properties']['VersioningConfiguration'] == 'Enabled':
-                            print('Found s3 bucket with versioning enabled.')
-                        if template['Resources'][r]['Properties']['VersioningConfiguration'] == 'Suspended':
-                            print('Found s3 bucket with versioning suspended.')
-                        risk = risk + 100
-                        print("Risk value: " +str(risk))
-                        failedRules.append("s3 versioning flag is neither Enabled or Suspended.")
-                        print("killing job")
-                        put_job_failure(job_id, "s3 versioning flag is neither Enabled or Suspended.")
+                        if template['Resources'][r]['Properties']['VersioningConfiguration']['Status'] != 'Enabled':
+                            if template['Resources'][r]['Properties']['VersioningConfiguration']['Status'] == 'Disabled':
+                                print('Found s3 bucket with versioning disabled.')
+                            if template['Resources'][r]['Properties']['VersioningConfiguration']['Status'] == 'Suspended':
+                                print('Found s3 bucket with versioning suspended.')
+                            risk = risk + 100
+                            print("Risk value: " +str(risk))
+                            failedRules.append("s3 versioning flag is neither Enabled or Suspended.")
+                            print("killing job")
+                            put_job_failure(job_id, "s3 versioning flag is neither Enabled or Suspended.")
+                        else:
+                            risk = 11
+
                     except:
                         risk = risk + 100
                         print("Risk value: " +str(risk))
