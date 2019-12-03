@@ -554,6 +554,7 @@
 <li>Rezip the directory with the modified resources.json. The name of the zip file is important and must match the original name.  The pipeline is looking for that filename specifically.  If Lambda takes a while to execute, look at the logs.  </li>
 <li>Upload and overwrite the existing zip file in: “{CloudformationStackName}-artifactstorebucket-{randomstring}</li>
 <li>Go back to your CodePipeline screen and watch the stages go through processing again.  If you fixed the code correctly, it should go through to the next stage.</li>
+<li>Re-enable the transition you disabled earlier.</li>
 <li>When it gets to the ApproveTestStack stage, click on the Review button and then approve the deployment. (Normally you would get an email asking for manual approval, but for the purposes of this lab, do not wait). Everything should then carry on until you have a pipeline full of stages which have succeeded.</li>
 </ol>
 <p><img alt="ApprovalStage" src="../images/02-ApprovalStage.png" /></p>
