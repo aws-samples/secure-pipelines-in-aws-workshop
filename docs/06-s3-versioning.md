@@ -13,7 +13,7 @@ Many organizations utilize s3 extensively.  It is important that the s3 buckets 
 
 
 2.	Add the appropriate configuration.
-    1.	Edit resource.json and remove the offending credentials.
+    1.	Edit resource.json and add the appropriate lines.
     2.	Rezip the “codepipe-AWS-devsecops.zip” (the exact name is important)
     3.	Upload the zip to s3.
 3.	Come back to the DevSecOps pipeline and watch it through the stages again.
