@@ -4,7 +4,7 @@ Now that your pipeline is built.  As a developer, you uploaded the zip files to 
 
 ## First Pipeline Error
 
-It looks like the pipeline has failed at the "Static Code Analysis" stage.
+Click on "Release Change".  It looks like the pipeline has failed at the "Static Code Analysis" stage.
 
 ![FirstPipelineError](./images/02-firstpipelineerror.png)
 
@@ -14,7 +14,7 @@ It looks like the pipeline has failed at the "Static Code Analysis" stage.
 ![CFNParsing](./images/02-CFNParsingInfo.png)
 
 3.  Note the location and file this is referencing.
-4.  Locate the file, resources.json and open it with your favorite editor.
+4.  Locate the file, resources.json and open it with your favorite editor.  (Certain editors such as Windows notepad or Mac TextEditor may not work when editing json files)
 5.  Find the issue in the file and change it the value.
 6.  Rezip the directory with the modified resources.json. The name of the zip file is important and must match the original name.  The pipeline is looking for that filename specifically.  If Lambda takes a while to execute, look at the logs.  
 7.  Upload and overwrite the existing zip file in: “{CloudformationStackName}-artifactstorebucket-{randomstring}

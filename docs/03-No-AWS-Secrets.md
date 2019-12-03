@@ -11,7 +11,7 @@ In this module, as a Security engineer, you will add a lambda function that will
 ## Setting Lambda to Look for AWS Credentials
 
 1.	Browse to the Lambda console, and create a new function from scratch. 
-2.	Be sure to select the Python 2.7 runtime, and the module*PipelineLambdaRole-<random> IAM Role.  
+2.	Be sure to select the Python 2.7 runtime, and the module*PipelineL-<random> IAM Role.  
 3.  Name the function to your choosing.  Create function.
 3.	Set the Lambda time out to 1 minute.
 4.	`cfn_secrets.py` is provided in the workshop.  Open this in your favorite editor.
