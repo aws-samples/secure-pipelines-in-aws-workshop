@@ -25,13 +25,15 @@ If you are using your own AWS account follow these steps:
 
 
 
-1. Download the code for the workshop here:  https://github.com/aws-samples/secure-pipelines-in-aws-workshop/tree/master/code
-2. Once in the AWS Console, go to S3 buckets. Look for a bucket: “{CloudformationStackName}-artifactstorebucket-{randomstring}
-3. Copy the two zip files into the S3 bucket (remember to copy the zip files, not the unzipped directories)
-4. Browse to the CodePipeline console. You will find a new Pipeline called DevSecOps.  You will see an error in the pipeline.  This is part of the next module.
+1. Browse to the CodePipeline console. You will find a new Pipeline called DevSecOps.
+2. Disable the transition between "StaticCodeAnalysis" and "TestDeployment". 
+3. Download the code for the workshop here:  https://github.com/aws-samples/secure-pipelines-in-aws-workshop/tree/master/code
+4. Once in the AWS Console, go to S3 buckets. Look for a bucket: “{CloudformationStackName}-artifactstorebucket-{randomstring}
+5. Copy the two zip files into the S3 bucket (remember to copy the zip files, not the unzipped directories)
 
 
-Your environment is now built with a basic pipeline using s3 as the source repository.  The error message is part of your next exercise.
+
+Your environment is now built with a basic pipeline using s3 as the source repository.
 
 ![Pipeline](./images/01-pipeline.png)
 

@@ -4,7 +4,9 @@ Now that your pipeline is built.  As a developer, you uploaded the zip files to 
 
 ## First Pipeline Error
 
-Click on "Release Change".  It looks like the pipeline has failed at the "Static Code Analysis" stage.
+**Click on "Release Change".**
+
+It looks like the pipeline has failed at the "Static Code Analysis" stage.
 
 ![FirstPipelineError](./images/02-firstpipelineerror.png)
 
@@ -19,6 +21,7 @@ Click on "Release Change".  It looks like the pipeline has failed at the "Static
 6.  Rezip the directory with the modified resources.json. The name of the zip file is important and must match the original name.  The pipeline is looking for that filename specifically.  If Lambda takes a while to execute, look at the logs.  
 7.  Upload and overwrite the existing zip file in: “{CloudformationStackName}-artifactstorebucket-{randomstring}
 8.  Go back to your CodePipeline screen and watch the stages go through processing again.  If you fixed the code correctly, it should go through to the next stage.
+9.  Re-enable the transition you disabled earlier.
 9. When it gets to the ApproveTestStack stage, click on the Review button and then approve the deployment. (Normally you would get an email asking for manual approval, but for the purposes of this lab, do not wait). Everything should then carry on until you have a pipeline full of stages which have succeeded.
 
 ![ApprovalStage](./images/02-ApprovalStage.png)
