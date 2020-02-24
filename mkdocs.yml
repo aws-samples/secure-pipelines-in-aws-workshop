@@ -11,7 +11,7 @@ repo_name: 'aws-samples/secure-pipelines-in-aws-workshop'
 repo_url: 'https://github.com/aws-samples/secure-pipelines-in-aws-workshop'
 
 # Copyright
-copyright: '&copy; 2019, Amazon Web Services, Inc. or its affiliates. All rights reserved.'
+copyright: '&copy; 2020, Amazon Web Services, Inc. or its affiliates. All rights reserved.'
 
 # Configuration
 theme:
