@@ -18,6 +18,7 @@ theme:
   name: 'material'
   logo: 'assets/images/aws_smile_logo.png'
   favicon: 'assets/images/aws-favicon.ico'
+  font: false
 
 # Customization
 extra_css:
