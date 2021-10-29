@@ -161,13 +161,13 @@ Resources:
       Code:
         S3Bucket: !Ref S3Bucket
         S3Key: !Ref LambdaS3Key
-      Role: !GetAtt 
+      Role: !GetAtt
         - CodePipelineLambdaRole
         - Arn
       Description: Always return success
       Timeout: 60
       Handler: cfn_validate_lambda.lambda_handler
-      Runtime: python2.7
+      Runtime: python3.9
   TestStackValidationLambda:
     Type: 'AWS::Lambda::Function'
     DependsOn:
@@ -177,13 +177,13 @@ Resources:
       Code:
         S3Bucket: !Ref S3Bucket
         S3Key: !Ref LambdaS3Key
-      Role: !GetAtt 
+      Role: !GetAtt
         - CodePipelineLambdaRole
         - Arn
       Description: Always return success
       Timeout: 60
       Handler: stack_validate_lambda.lambda_handler
-      Runtime: python2.7
+      Runtime: python3.9
   myDynamoDBTable:
     Type: 'AWS::DynamoDB::Table'
     Properties:
@@ -266,7 +266,7 @@ Resources:
         Type: S3
       DisableInboundStageTransitions: []
       Name: !Ref PipelineName
-      RoleArn: !GetAtt 
+      RoleArn: !GetAtt
         - PipelineRole
         - Arn
       Stages:
@@ -297,7 +297,7 @@ Resources:
                 Version: '1'
               Configuration:
                 FunctionName: !Ref CFNValidateLambda
-                UserParameters: !Sub 
+                UserParameters: !Sub
                   - >-
                     {"input": "TemplateSource", "file":
                     "${TemplateFilePath}","output": "${S3BucketName}"}
@@ -319,7 +319,7 @@ Resources:
                 - Name: StackOutput
               Configuration:
                 ActionMode: REPLACE_ON_FAILURE
-                RoleArn: !GetAtt 
+                RoleArn: !GetAtt
                   - CFNRole
                   - Arn
                 StackName: !Ref TestStackName
@@ -360,7 +360,7 @@ Resources:
                 Version: '1'
               Configuration:
                 ActionMode: DELETE_ONLY
-                RoleArn: !GetAtt 
+                RoleArn: !GetAtt
                   - CFNRole
                   - Arn
                 StackName: !Ref TestStackName
@@ -378,7 +378,7 @@ Resources:
               OutputArtifacts: []
               Configuration:
                 ActionMode: CHANGE_SET_REPLACE
-                RoleArn: !GetAtt 
+                RoleArn: !GetAtt
                   - CFNRole
                   - Arn
                 StackName: !Ref ProdStackName
@@ -394,7 +394,7 @@ Resources:
                 Version: '1'
               Configuration:
                 ActionMode: CHANGE_SET_EXECUTE
-                RoleArn: !GetAtt 
+                RoleArn: !GetAtt
                   - CFNRole
                   - Arn
                 ChangeSetName: !Ref ChangeSetName
