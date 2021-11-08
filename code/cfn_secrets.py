@@ -268,13 +268,23 @@ def evaluate_template(template, job_id):
     return risk, failedRules
 
 def s3_next_step(s3, bucket, risk, failedRules, template, job_id):
+    print(str(s3))
+    print(str(bucket))
+    print(str(risk))
+    print(str(failedRules))
+    print(str(template))
+    print(str(job_id))
+    
     # Store data in temporary physical file
     s3Client = boto3.client('s3', config=botocore.client.Config(signature_version='s3v4'))
     tmp_file = tempfile.NamedTemporaryFile()
     tmp_zip = tempfile.NamedTemporaryFile()
     for item in template:
-        tmp_file.write(item)
+        print('Item*'+str(item))
+        tmp_file.write(bytes(item))
     tmp_file.flush()
+    
+    print('OK')
     # Process file based on risk value
     if risk < 5:
         with zipfile.ZipFile(tmp_zip.name, 'w') as zip:
@@ -348,7 +358,9 @@ def lambda_handler(event, context):
 
 
         # Validate template from risk perspective. FailedRules can be used if you wish to expand the script to report failed items
-        risk, failedRules = evaluate_template(template, job_id)
+        template1= template.decode('utf-8')
+        
+        risk, failedRules = evaluate_template(template1, job_id)
 
         # Based on risk, store the template in the correct S3 bucket for future process
         s3_next_step(s3, output_bucket, risk, failedRules, template, job_id)
