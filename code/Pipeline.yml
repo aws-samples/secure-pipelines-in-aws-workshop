@@ -166,8 +166,8 @@ Resources:
         - Arn
       Description: Always return success
       Timeout: 60
-      Handler: cfn_validate_lambda.lambda_handler
-      Runtime: python2.7
+      Handler: SecGuardRails/cfn_validate_lambda.lambda_handler
+      Runtime: python3.8
   TestStackValidationLambda:
     Type: 'AWS::Lambda::Function'
     DependsOn:
@@ -182,8 +182,8 @@ Resources:
         - Arn
       Description: Always return success
       Timeout: 60
-      Handler: stack_validate_lambda.lambda_handler
-      Runtime: python2.7
+      Handler: SecGuardRails/stack_validate_lambda.lambda_handler
+      Runtime: python3.8
   myDynamoDBTable:
     Type: 'AWS::DynamoDB::Table'
     Properties:

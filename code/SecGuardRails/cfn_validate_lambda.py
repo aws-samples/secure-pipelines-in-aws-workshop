@@ -352,8 +352,9 @@ def s3_next_step(s3, bucket, risk, failedRules, template, job_id):
     s3Client = boto3.client('s3', config=botocore.client.Config(signature_version='s3v4'))
     tmp_file = tempfile.NamedTemporaryFile()
     tmp_zip = tempfile.NamedTemporaryFile()
-    for item in template:
-        tmp_file.write(item)
+    # for item in template:
+    #     tmp_file.write(item)
+    tmp_file.write(template)
     tmp_file.flush()
     # Process file based on risk value
     if risk < 5:
@@ -393,15 +394,16 @@ def lambda_handler(event, context):
         context: The context passed by Lambda
 
     """
+
+    # Extract the Job ID
+    job_id = event['CodePipeline.job']['id']
+
+    # Extract the Job Data
+    job_data = event['CodePipeline.job']['data']
+
     try:
         # Print the entire event for tracking
         print("Received event: " + json.dumps(event, indent=2))
-
-        # Extract the Job ID
-        job_id = event['CodePipeline.job']['id']
-
-        # Extract the Job Data
-        job_data = event['CodePipeline.job']['data']
 
         # Extract the params
         params = get_user_params(job_data)
@@ -421,7 +423,7 @@ def lambda_handler(event, context):
 
         # Get the JSON template file out of the artifact
         template = get_template(s3, input_artifact_data, template_file)
-        print("Template: " + template)
+        print("Template: " + str(template))
 
         # Get validation rules from DDB
         rules = get_rules()

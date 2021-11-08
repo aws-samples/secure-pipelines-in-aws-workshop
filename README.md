@@ -4,7 +4,7 @@ This hands workshop will walk you through various common scenarios looking from 
 
 ## Start the workshop:
 
-Visit the site to get started: [https://devops.awssecworkshops.com/](https://devops.awssecworkshops.com/)
+Visit the site to get started: [Workshop link](https://catalog.us-east-1.prod.workshops.aws/v2/workshops/bcfb7b70-a090-4563-a058-496c1a4fbf32/en-US/)
 
 ## License
 
