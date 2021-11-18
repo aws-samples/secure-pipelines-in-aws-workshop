@@ -205,6 +205,13 @@ def get_rules():
     if len(response['Items']) == 0:
         add_rules(logTable)
         time.sleep(45)
+        # Getting rules again from the table, after creation
+        response = client.scan(
+            TableName=logTable,
+            AttributesToGet=[
+                'rule',
+            ]
+        )
 
     # Get all rules from DDB.
     # Rules have rule, ruledata, type and weight
@@ -352,8 +359,7 @@ def s3_next_step(s3, bucket, risk, failedRules, template, job_id):
     s3Client = boto3.client('s3', config=botocore.client.Config(signature_version='s3v4'))
     tmp_file = tempfile.NamedTemporaryFile()
     tmp_zip = tempfile.NamedTemporaryFile()
-    for item in template:
-        tmp_file.write(item)
+    tmp_file.write(template)
     tmp_file.flush()
     # Process file based on risk value
     if risk < 5:
@@ -421,7 +427,7 @@ def lambda_handler(event, context):
 
         # Get the JSON template file out of the artifact
         template = get_template(s3, input_artifact_data, template_file)
-        print("Template: " + template)
+        print("Template File: " + template_file)
 
         # Get validation rules from DDB
         rules = get_rules()
