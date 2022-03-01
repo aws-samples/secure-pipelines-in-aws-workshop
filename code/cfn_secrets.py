@@ -234,7 +234,7 @@ def evaluate_template(template, job_id):
     failedRules = []
     print("----------------")
     template = str(json.loads(template))
-    #shy
+    
 
     #print(template)
     smite = re.compile(r'A3T[A-Z0-9]|(AKIA|AGPA|AIDA|AROA|AIPA|ANPA|ANVA|ASIA)[A-Z0-9]{16}')
@@ -278,7 +278,7 @@ def s3_next_step(s3, bucket, risk, failedRules, template, job_id):
     #for item in template:
         #tmp_file.write(item)
     tmp_file.write(template)
-    #shy
+
     tmp_file.flush()
     # Process file based on risk value
     if risk < 5:

@@ -355,7 +355,7 @@ def s3_next_step(s3, bucket, risk, failedRules, template, job_id):
     #for item in template:
         #tmp_file.write(item)
     tmp_file.write(template)
-    #shy
+    
     
     tmp_file.flush()
     # Process file based on risk value
@@ -425,7 +425,7 @@ def lambda_handler(event, context):
         # Get the JSON template file out of the artifact
         template = get_template(s3, input_artifact_data, template_file)
         print("Template: " + template_file)
-        #shy
+        
         # Get validation rules from DDB
         rules = get_rules()
 

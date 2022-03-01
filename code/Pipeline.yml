@@ -9,7 +9,7 @@ Parameters:
   S3Bucket:
     Default: 'InputBucketNameYouCreated'
     Description: >-
-      The name of the S3 bucket that contains the source Lambda security guardrails, which must be
+      The name  of the S3 bucket that contains the source Lambda security guardrails, which must be
       in the same region as this stack
     Type: String
   SourceS3Key:
