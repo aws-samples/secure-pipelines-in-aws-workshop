@@ -233,9 +233,9 @@ def evaluate_template(template, job_id):
     risk = 0
     failedRules = []
     print("----------------")
-    #jsonTemplate = json.loads(template)
+    
+    template = str(json.loads(template))
 
-    #print(template)
     smite = re.compile(r'A3T[A-Z0-9]|(AKIA|AGPA|AIDA|AROA|AIPA|ANPA|ANVA|ASIA)[A-Z0-9]{16}')
     matchobj = smite.search(template)
     if matchobj:         # True if matchobj is not "nothing"
@@ -272,8 +272,9 @@ def s3_next_step(s3, bucket, risk, failedRules, template, job_id):
     s3Client = boto3.client('s3', config=botocore.client.Config(signature_version='s3v4'))
     tmp_file = tempfile.NamedTemporaryFile()
     tmp_zip = tempfile.NamedTemporaryFile()
-    for item in template:
-        tmp_file.write(item)
+    
+    tmp_file.write(template)
+    
     tmp_file.flush()
     # Process file based on risk value
     if risk < 5:
