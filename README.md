@@ -4,7 +4,7 @@ This hands workshop will walk you through various common scenarios looking from 
 
 ## Start the workshop:
 
-Visit the site to get started: [https://devops.awssecworkshops.com/](https://devops.awssecworkshops.com/)
+Visit the site to get started: [AWS DevSecOps](https://catalog.workshops.aws/devsecops)
 
 ## License
 
